@@ -201,8 +201,30 @@ HRESULT PS3EyePushPin::FillBuffer(IMediaSample *pSample)
 		_device->getFrame(pData);
 	}
 	else {
-		// TODO: fill with error message image
-		for (int i = 0; i < cbData; ++i) pData[i] = 0;
+		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER*)m_mt.Format();
+		int width = pvi->bmiHeader.biWidth;
+		int height = pvi->bmiHeader.biHeight;
+		int stride = pvi->bmiHeader.biBitCount / 8 * width;
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				int i = y * stride + x * 4;
+				int stripe = (x * 8) / width;
+				switch (stripe)
+				{
+				case 0: pData[i+0]=255; pData[i+1]=0;   pData[i+2]=0;   break;
+				case 1: pData[i+0]=0;   pData[i+1]=255; pData[i+2]=0;   break;
+				case 2: pData[i+0]=0;   pData[i+1]=0;   pData[i+2]=255; break;
+				case 3: pData[i+0]=0;   pData[i+1]=255; pData[i+2]=255; break;
+				case 4: pData[i+0]=255; pData[i+1]=0;   pData[i+2]=255; break;
+				case 5: pData[i+0]=255; pData[i+1]=255; pData[i+2]=0;   break;
+				case 6: pData[i+0]=128; pData[i+1]=128; pData[i+2]=128; break;
+				case 7: pData[i+0]=0;   pData[i+1]=0;   pData[i+2]=0;   break;
+				}
+				pData[i+3] = 255;
+			}
+		}
 	}
 
 	if (_refClock != NULL) {
