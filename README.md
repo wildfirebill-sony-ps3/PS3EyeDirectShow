@@ -1,4 +1,5 @@
 # PS3EyeDirectShow
+Modified by [wildfirebill](https://github.com/wildfirebill)
 Windows DirectShow source filter for the PS3 Eye Camera via WinUSB (32 / 64 bit)
 
 This package is an extension of [https://github.com/inspirit/PS3EYEDriver/](https://github.com/inspirit/PS3EYEDriver/), which is itself a port of the PS3 Eye Linux driver to Windows. This project wraps that code into a DirectShow source filter so that it behaves like a USB camera with a native Windows driver. Any application that goes through the standard DirectShow API to connect to a webcam should (in theory) be able to use this driver. This code has only had limited testing so there may be compatibility issues with some apps.
